@@ -15,7 +15,7 @@ sample <- read.csv(here::here("data/sample_submission.csv"), header = TRUE)
 # exploring data
 # correlation matrix
 corr_matrix <- cor(train)
-round(corr_matrix, 2)
+round(corr_matrix, 3)
 
 #top variables:
   #MonsoonIntensity
@@ -36,12 +36,32 @@ round(corr_matrix, 2)
     ### checking model
     sigma(model)/mean(train$FloodProbability)
       #4% error rate
-
+    ### r squared
+    summary(model)$r.squared 
+    
+  ## select variables
+  # model_select <- lm(FloodProbability ~ MonsoonIntensity + TopographyDrainage + RiverManagement +
+  #                                       Deforestation + Urbanization + ClimateChange + DamsQuality +
+  #                                       Siltation + AgriculturalPractices + Encroachments + 
+  #                                       IneffectiveDisasterPreparedness +
+  #                                       DrainageSystems + CoastalVulnerability + Landslides + Watersheds +
+  #                                       DeterioratingInfrastructure + PopulationScore + WetlandLoss +
+  #                                       InadequatePlanning + PoliticalFactors,
+  #                    data = train)
+  
+    model_select <- lm(FloodProbability ~ MonsoonIntensity + TopographyDrainage + RiverManagement +
+                                        ClimateChange + DamsQuality +
+                                        Siltation + Landslides +
+                                        DeterioratingInfrastructure + PopulationScore,
+                     data = train)
+  
+  summary(model_select)$r.squared 
+  
 # applying model to test dataset
-test$FloodProbability <- predict(model, newdata=test)
+test$FloodProbability <- predict(model_select, newdata=test)
 
 submission <- test %>% 
   select(id, FloodProbability)
 
 # exporting
-write.csv(submission, here::here("output/submission.csv"), row.names = FALSE)
+write.csv(submission, here::here("output/submission6.csv"), row.names = FALSE)
