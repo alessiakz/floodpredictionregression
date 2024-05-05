@@ -57,11 +57,16 @@ round(corr_matrix, 3)
   
   summary(model_select)$r.squared
   
+# multiple logistic regression
+  model_logi <- glm(FloodProbability ~. -id, family=gaussian(link = "identity"), data=train)
+  
+  summary(model_logi)
+  
 # applying model to test dataset
-test$FloodProbability <- predict(model_select, newdata=test)
+test$FloodProbability <- predict(model_logi, newdata=test)
 
 submission <- test %>% 
   select(id, FloodProbability)
 
 # exporting
-write.csv(submission, here::here("output/submission6.csv"), row.names = FALSE)
+write.csv(submission, here::here("output/submission7.csv"), row.names = FALSE)
