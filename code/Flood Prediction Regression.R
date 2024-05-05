@@ -49,13 +49,13 @@ round(corr_matrix, 3)
   #                                       InadequatePlanning + PoliticalFactors,
   #                    data = train)
   
-    model_select <- lm(FloodProbability ~ MonsoonIntensity + TopographyDrainage + RiverManagement +
-                                        ClimateChange + DamsQuality +
-                                        Siltation + Landslides +
+    model_select <- lm(FloodProbability ~ MonsoonIntensity + TopographyDrainage + 
+                                        DamsQuality +
+                                        Landslides +
                                         DeterioratingInfrastructure + PopulationScore,
                      data = train)
   
-  summary(model_select)$r.squared 
+  summary(model_select)$r.squared
   
 # applying model to test dataset
 test$FloodProbability <- predict(model_select, newdata=test)
